@@ -8,8 +8,6 @@ import json
 import os
 import subprocess
 import sys
-import tempfile
-import textwrap
 from pathlib import Path
 
 import pytest
@@ -75,27 +73,37 @@ def build_json(
 def layout(tmp_path):
     """Create test directory layout:
 
-    tmp/workspace/project/          (cwd)
+    tmp/workspace/project/              (cwd)
     tmp/workspace/project/subdir/
-    tmp/workspace/sibling/          CLAUDE.md
+    tmp/workspace/sibling/              CLAUDE.md
     tmp/workspace/sibling/deep/nested/  CLAUDE.md
-    tmp/workspace/                  CLAUDE.md  (ancestor of cwd)
+    tmp/workspace/tools/linter/         CLAUDE.md  (cousin)
+    tmp/workspace/                      CLAUDE.md  (ancestor of cwd)
+    tmp/other-team/services/api/        CLAUDE.md  (unrelated tree)
     """
     project = tmp_path / "workspace" / "project"
     sibling = tmp_path / "workspace" / "sibling"
     deep = sibling / "deep" / "nested"
+    cousin = tmp_path / "workspace" / "tools" / "linter"
+    unrelated = tmp_path / "other-team" / "services" / "api"
 
     (project / "subdir").mkdir(parents=True)
     deep.mkdir(parents=True)
+    cousin.mkdir(parents=True)
+    unrelated.mkdir(parents=True)
 
     (sibling / "CLAUDE.md").write_text("# sibling\n")
     (tmp_path / "workspace" / "CLAUDE.md").write_text("# parent\n")
     (deep / "CLAUDE.md").write_text("# deep\n")
+    (cousin / "CLAUDE.md").write_text("# cousin\n")
+    (unrelated / "CLAUDE.md").write_text("# unrelated\n")
 
     return {
         "project": str(project),
         "sibling": str(sibling),
         "deep": str(deep),
+        "cousin": str(cousin),
+        "unrelated": str(unrelated),
         "parent": str(tmp_path / "workspace"),
     }
 
@@ -224,6 +232,35 @@ class TestDiscovery:
         assert rc == 2
         assert os.path.join(layout["deep"], "CLAUDE.md") in stderr
         assert os.path.join(layout["sibling"], "CLAUDE.md") in stderr
+
+    def test_discovers_cousin_claude_md(self, layout):
+        sid = next_sid("cousin")
+        payload = build_json(
+            tool="Read", sid=sid, cwd=layout["project"],
+            file_path=os.path.join(layout["cousin"], "file.txt"),
+        )
+        rc, _, stderr = run_hook(payload)
+        assert rc == 2
+        assert os.path.join(layout["cousin"], "CLAUDE.md") in stderr
+
+    def test_discovers_unrelated_tree_claude_md(self, layout):
+        sid = next_sid("unrelated")
+        payload = build_json(
+            tool="Read", sid=sid, cwd=layout["project"],
+            file_path=os.path.join(layout["unrelated"], "file.txt"),
+        )
+        rc, _, stderr = run_hook(payload)
+        assert rc == 2
+        assert os.path.join(layout["unrelated"], "CLAUDE.md") in stderr
+
+    def test_unrelated_tree_excludes_ancestor_claude_md(self, layout):
+        sid = next_sid("unrelated-no-ancestor")
+        payload = build_json(
+            tool="Read", sid=sid, cwd=layout["project"],
+            file_path=os.path.join(layout["unrelated"], "file.txt"),
+        )
+        _, _, stderr = run_hook(payload)
+        assert os.path.join(layout["parent"], "CLAUDE.md") not in stderr
 
     def test_no_discovery_when_no_claude_md(self, layout):
         os.unlink(os.path.join(layout["sibling"], "CLAUDE.md"))
@@ -409,8 +446,8 @@ class TestOutputFormat:
             file_path=os.path.join(layout["sibling"], "file.txt"),
         )
         _, _, stderr = run_hook(payload)
-        assert "<claude-md-sibling-discovery>" in stderr
-        assert "</claude-md-sibling-discovery>" in stderr
+        assert "<claude-md-discovery-extended>" in stderr
+        assert "</claude-md-discovery-extended>" in stderr
 
     def test_stderr_lists_paths(self, layout):
         sid = next_sid("paths")

@@ -1,5 +1,5 @@
 {
-  "description": "Detects CLAUDE.md files in sibling directories when Claude operates on files outside the project, and cleans up session tracking on exit.",
+  "description": "Detects CLAUDE.md files in directories outside the project tree when Claude accesses files there, and cleans up session tracking on exit.",
   "hooks": {
     "SessionStart": [
       {

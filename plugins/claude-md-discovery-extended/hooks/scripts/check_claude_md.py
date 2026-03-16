@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Discover CLAUDE.md files in sibling/cousin directories outside the project tree.
+"""Discover CLAUDE.md files in directories outside the project tree.
 
 Claude Code PostToolUse hook that reads JSON hook input from stdin.
 Outputs discovery messages to stderr and exits 2 to feed them back
@@ -188,7 +188,7 @@ def emit_discovery(found: list[str]) -> None:
 
     if len(found) == 1:
         message = (
-            "<claude-md-sibling-discovery>\n"
+            "<claude-md-discovery-extended>\n"
             "A CLAUDE.md file was discovered that you have not read this session.\n"
             "\n"
             "IMPORTANT: You MUST read it immediately.\n"
@@ -197,11 +197,11 @@ def emit_discovery(found: list[str]) -> None:
             "IMPORTANT: Do NOT stop to inform the user you have read it.\n"
             "\n"
             f"**File Path**: {found[0]}\n"
-            "</claude-md-sibling-discovery>"
+            "</claude-md-discovery-extended>"
         )
     else:
         message = (
-            "<claude-md-sibling-discovery>\n"
+            "<claude-md-discovery-extended>\n"
             f"{len(found)} CLAUDE.md files were discovered that you have not read this session.\n"
             "\n"
             "IMPORTANT: You MUST read each immediately.\n"
@@ -211,7 +211,7 @@ def emit_discovery(found: list[str]) -> None:
             "\n"
             "**File Paths**:\n"
             f"{file_list}\n"
-            "</claude-md-sibling-discovery>"
+            "</claude-md-discovery-extended>"
         )
 
     print(message, file=sys.stderr)

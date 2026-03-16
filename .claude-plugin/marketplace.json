@@ -4,15 +4,16 @@
     "name": "Spencer Presley"
   },
   "metadata": {
-    "description": "Claude Code plugins by Spencer Presley"
+    "description": "Claude Code plugins by Spencer Presley",
+    "pluginRoot": "./plugins"
   },
   "plugins": [
     {
-      "name": "claude-md-sibling-discovery",
-      "source": "./",
-      "description": "Automatically discovers and loads CLAUDE.md files from sibling and cousin directories when Claude accesses files outside your project.",
+      "name": "claude-md-discovery-extended",
+      "source": "claude-md-discovery-extended",
+      "description": "Auto-discovers and loads CLAUDE.md files from any directory outside your project tree when the model accesses files there.",
       "version": "0.2.0",
-      "keywords": ["claude-md", "sibling", "discovery", "hooks"]
+      "keywords": ["claude-md", "discovery", "hooks", "auto-discovery"]
     }
   ]
 }

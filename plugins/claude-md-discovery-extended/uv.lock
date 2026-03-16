@@ -3,7 +3,7 @@ revision = 3
 requires-python = ">=3.10"
 
 [[package]]
-name = "claude-md-sibling-discovery"
+name = "claude-md-discovery-extended"
 version = "0.2.0"
 source = { virtual = "." }
 

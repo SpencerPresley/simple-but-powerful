@@ -32,9 +32,10 @@ None of these cover directories outside the ancestor/child path discovered mid-s
 grandparent/
   CLAUDE.md           <- loaded (ancestor)
   parent/
-    CLAUDE.md         <- loaded (ancestor)
     projectA/         <- your project (cwd)
-      CLAUDE.md       <- loaded (ancestor)
+      CLAUDE.md       <- loaded (project root)
+      src/
+        CLAUDE.md     <- loaded (child, on demand)
     projectB/
       CLAUDE.md       <- NOT loaded
     projectC/

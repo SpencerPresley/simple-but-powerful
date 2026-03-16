@@ -73,7 +73,6 @@ Each discovery is recorded in a session-scoped tracking file (`/tmp/claude-md-se
 ## Limitations
 
 - **Bash path extraction is best-effort**: paths are extracted from Bash commands via `shlex` tokenization. This handles common patterns (`cat /path/to/file`, `ls /some/dir`, quoted paths) but won't catch paths in redirects, pipes, or subshells.
-- **Only matches `CLAUDE.md`**: does not look for `.claude.md` (lowercase with dot prefix).
 
 ## License
 

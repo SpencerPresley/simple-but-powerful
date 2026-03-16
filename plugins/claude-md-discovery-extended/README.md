@@ -2,6 +2,8 @@
 
 A Claude Code plugin that fills a gap in `CLAUDE.md` auto-discovery. Claude Code has built-in discovery for some directory relationships but not all. This plugin covers what Claude Code doesn't: sibling directories, cousin directories, or completely unrelated trees. Discovery happens on demand when the model accesses files in those directories.
 
+**Example directory relationships:**
+
 ```text
 grandparent/
   parent/

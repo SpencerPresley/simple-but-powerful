@@ -1,6 +1,18 @@
 # claude-md-sibling-discovery
 
-A Claude Code plugin that discovers `CLAUDE.md` files in sibling and cousin directories when the model accesses files outside the current project.
+A Claude Code plugin that fills a gap in `CLAUDE.md` auto-discovery. Claude Code already discovers `CLAUDE.md` files in ancestor directories (walking up from cwd) and in child directories (when files there are accessed). This plugin covers everything else: sibling directories, cousin directories, or completely unrelated trees. Discovery happens on demand when the model accesses files in those directories.
+
+```text
+grandparent/
+  parent/
+    projectA/  ← your project
+    projectB/  ← sibling
+  tools/
+    linter/    ← cousin
+other-team/
+  services/
+    api/       ← unrelated tree
+```
 
 ## Background
 
@@ -65,42 +77,6 @@ Then install the plugin:
 
 - **Bash path extraction is best-effort**: paths are extracted from Bash commands via `shlex` tokenization. This handles common patterns (`cat /path/to/file`, `ls /some/dir`, quoted paths) but won't catch paths in redirects, pipes, or subshells.
 - **Only matches `CLAUDE.md`**: does not look for `.claude.md` (lowercase with dot prefix).
-## Manual Hook Configuration
-
-To use the hooks without the plugin, add them to `.claude/settings.json` directly:
-
-```json
-{
-  "hooks": {
-    "PostToolUse": [
-      {
-        "matcher": "Read|Glob|Grep|Edit|Write|Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "python3 /path/to/check_claude_md.py",
-            "timeout": 5
-          }
-        ]
-      }
-    ],
-    "SessionEnd": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash /path/to/cleanup-session-tracking.sh",
-            "timeout": 5
-          }
-        ]
-      }
-    ]
-  }
-}
-```
-
-Scripts are in [hooks/scripts/](hooks/scripts/). The `SessionStart` dependency check is optional if you know `jq` and `python3` are installed.
 
 ## License
 

@@ -1,6 +1,6 @@
 # simple-but-powerful
 
-Focused Claude Code plugins that each solve one specific problem. No skill dumps, no prompt wrappers, no context bloat. Just small, sharp utilities that fill real gaps in how Claude Code works.
+Focused Claude Code plugins that each solve one specific problem. Small enough to actually use, sharp enough to actually help.
 
 ## Installation
 

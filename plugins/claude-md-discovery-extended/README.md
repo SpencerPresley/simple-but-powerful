@@ -1,6 +1,6 @@
 # claude-md-discovery-extended
 
-A Claude Code plugin that fills a gap in `CLAUDE.md` auto-discovery. Claude Code already discovers `CLAUDE.md` files in ancestor directories (walking up from cwd) and in child directories (when files there are accessed). This plugin covers everything else: sibling directories, cousin directories, or completely unrelated trees. Discovery happens on demand when the model accesses files in those directories.
+A Claude Code plugin that fills a gap in `CLAUDE.md` auto-discovery. Claude Code has built-in discovery for some directory relationships but not all. This plugin covers what Claude Code doesn't: sibling directories, cousin directories, or completely unrelated trees. Discovery happens on demand when the model accesses files in those directories.
 
 ```text
 grandparent/
@@ -24,23 +24,27 @@ Claude Code loads `CLAUDE.md` files from three sources:
 
 See the [CLAUDE.md docs](https://code.claude.com/docs/en/memory) for full details.
 
-None of these cover sibling or cousin directories discovered mid-session. Given:
+None of these cover directories outside the ancestor/child path discovered mid-session. Given:
 
 ```text
-projects/
-  CLAUDE.md
-  projectA/
-    CLAUDE.md
-    src/
-  projectB/
-    CLAUDE.md
-    src/
-  projectC/
-    CLAUDE.md
-    lib/
+grandparent/
+  parent/
+    projectA/       <- your project (cwd)
+      CLAUDE.md
+      src/
+    projectB/       <- sibling
+      CLAUDE.md
+      src/
+  tools/
+    linter/         <- cousin
+      CLAUDE.md
+other-team/
+  services/
+    api/            <- unrelated tree
+      CLAUDE.md
 ```
 
-If you launch in `projectA`, Claude Code loads `projectA/CLAUDE.md` and `projects/CLAUDE.md` (ancestors). If the model then reads a file in `projectB/src/`, `projectB/CLAUDE.md` is never loaded.
+If you launch in `projectA`, Claude Code loads `projectA/CLAUDE.md`, `parent/CLAUDE.md`, and `grandparent/CLAUDE.md` (ancestors). But if the model then reads a file in `projectB/src/`, `tools/linter/`, or `other-team/services/api/`, none of those `CLAUDE.md` files are loaded.
 
 `--add-dir` can solve this, but it loads everything at startup. You need to know which directories matter ahead of time, specify them every session, and their `CLAUDE.md` contents occupy the context window from the start whether they end up being relevant or not. This plugin takes a [progressive disclosure](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) approach instead: `CLAUDE.md` files are discovered and loaded on demand as the model accesses files in those directories, keeping the context window lean until the instructions are actually needed.
 

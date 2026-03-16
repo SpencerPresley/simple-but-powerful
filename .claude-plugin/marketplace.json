@@ -1,5 +1,5 @@
 {
-  "name": "claude-md-sibling-discovery",
+  "name": "simple-but-powerful",
   "owner": {
     "name": "Spencer Presley"
   },
@@ -11,7 +11,7 @@
       "name": "claude-md-sibling-discovery",
       "source": "./",
       "description": "Automatically discovers and loads CLAUDE.md files from sibling and cousin directories when Claude accesses files outside your project.",
-      "version": "1.0.0",
+      "version": "0.2.0",
       "keywords": ["claude-md", "sibling", "discovery", "hooks"]
     }
   ]

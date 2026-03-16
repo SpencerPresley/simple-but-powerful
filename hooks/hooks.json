@@ -1,5 +1,5 @@
 {
-  "description": "Detects CLAUDE.md files in sibling directories when Claude reads files outside the project, and cleans up session tracking on exit.",
+  "description": "Detects CLAUDE.md files in sibling directories when Claude operates on files outside the project, and cleans up session tracking on exit.",
   "hooks": {
     "SessionStart": [
       {
@@ -15,11 +15,11 @@
     ],
     "PostToolUse": [
       {
-        "matcher": "Read|Glob|Grep|Edit|Write",
+        "matcher": "Read|Glob|Grep|Edit|Write|Bash",
         "hooks": [
           {
             "type": "command",
-            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/scripts/check-claude-md.sh",
+            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/scripts/check_claude_md.py",
             "timeout": 5
           }
         ]

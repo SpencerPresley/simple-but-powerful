@@ -44,8 +44,16 @@ Files within the project tree are skipped with a single string comparison. The d
 
 ## Installation
 
-```bash
-claude plugin add --source github SpencerPresley/claude-md-sibling-discovery
+First, add the marketplace:
+
+```
+/plugin marketplace add SpencerPresley/simple-but-powerful
+```
+
+Then install the plugin:
+
+```
+/plugin install claude-md-sibling-discovery@simple-but-powerful
 ```
 
 ## Requirements
@@ -57,8 +65,6 @@ claude plugin add --source github SpencerPresley/claude-md-sibling-discovery
 
 - **Bash path extraction is best-effort**: paths are extracted from Bash commands via `shlex` tokenization. This handles common patterns (`cat /path/to/file`, `ls /some/dir`, quoted paths) but won't catch paths in redirects, pipes, or subshells.
 - **Only matches `CLAUDE.md`**: does not look for `.claude.md` (lowercase with dot prefix).
-- **No symlink normalization**: path comparisons use raw string matching.
-
 ## Manual Hook Configuration
 
 To use the hooks without the plugin, add them to `.claude/settings.json` directly:
@@ -95,6 +101,7 @@ To use the hooks without the plugin, add them to `.claude/settings.json` directl
 ```
 
 Scripts are in [hooks/scripts/](hooks/scripts/). The `SessionStart` dependency check is optional if you know `jq` and `python3` are installed.
+
 ## License
 
 MIT

@@ -1,7 +1,7 @@
 {
   "name": "claude-md-sibling-discovery",
   "description": "Automatically discovers and loads CLAUDE.md files from sibling and cousin directories when Claude reads files outside your project. Fills the gap where Claude Code only loads CLAUDE.md from ancestor directories (at startup) and child directories (on demand), but not from sibling/cousin directories.",
-  "version": "1.0.0",
+  "version": "0.2.0",
   "author": {
     "name": "Spencer Presley"
   }

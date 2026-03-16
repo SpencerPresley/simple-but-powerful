@@ -26,27 +26,29 @@ Claude Code loads `CLAUDE.md` files from three sources:
 
 See the [CLAUDE.md docs](https://code.claude.com/docs/en/memory) for full details.
 
-None of these cover directories outside the ancestor/child path discovered mid-session. Given:
+None of these cover directories outside the ancestor/child path discovered mid-session. If you launch in `projectA`:
 
 ```text
 grandparent/
+  CLAUDE.md           <- loaded (ancestor)
   parent/
-    projectA/       <- your project (cwd)
-      CLAUDE.md
-      src/
-    projectB/       <- sibling
-      CLAUDE.md
-      src/
+    CLAUDE.md         <- loaded (ancestor)
+    projectA/         <- your project (cwd)
+      CLAUDE.md       <- loaded (ancestor)
+    projectB/
+      CLAUDE.md       <- NOT loaded
+    projectC/
+      CLAUDE.md       <- NOT loaded
   tools/
-    linter/         <- cousin
-      CLAUDE.md
+    linter/
+      CLAUDE.md       <- NOT loaded
 other-team/
   services/
-    api/            <- unrelated tree
-      CLAUDE.md
+    api/
+      CLAUDE.md       <- NOT loaded
 ```
 
-If you launch in `projectA`, Claude Code loads `projectA/CLAUDE.md`, `parent/CLAUDE.md`, and `grandparent/CLAUDE.md` (ancestors). But if the model then reads a file in `projectB/src/`, `tools/linter/`, or `other-team/services/api/`, none of those `CLAUDE.md` files are loaded.
+Every `CLAUDE.md` outside the ancestor/child path is invisible to Claude Code. This plugin loads them.
 
 `--add-dir` can solve this, but it loads everything at startup. You need to know which directories matter ahead of time, specify them every session, and their `CLAUDE.md` contents occupy the context window from the start whether they end up being relevant or not. This plugin takes a [progressive disclosure](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) approach instead: `CLAUDE.md` files are discovered and loaded on demand as the model accesses files in those directories, keeping the context window lean until the instructions are actually needed.
 

@@ -52,7 +52,9 @@ Three [hooks](https://code.claude.com/docs/en/hooks):
 - **SessionStart**: checks that `jq` and `python3` are installed, warns if missing.
 - **SessionEnd**: deletes the session-scoped tracking file.
 
-Files within the project tree are skipped with a single string comparison. The directory walk stops at ancestor directories (already loaded at launch). A per-session temp file deduplicates discoveries.
+Files within the project tree are skipped with a single string comparison. The directory walk stops at ancestor directories (already loaded at launch).
+
+Each discovery is recorded in a session-scoped tracking file (`/tmp/claude-md-seen-{session_id}`). Once a `CLAUDE.md` has been discovered and reported, it won't trigger again for the rest of the session. The SessionEnd hook cleans up this file automatically.
 
 ## Requirements
 

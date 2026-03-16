@@ -49,7 +49,7 @@ other-team/
       CLAUDE.md       <- NOT loaded
 ```
 
-Every `CLAUDE.md` outside the ancestor/child path is invisible to Claude Code. This plugin loads them.
+Every `CLAUDE.md` outside the ancestor/child path won't be auto-loaded. The model can still read them manually, but it almost never will on its own, so you'd have to stop it and tell it to. This plugin handles that automatically.
 
 `--add-dir` can solve this, but it loads everything at startup. You need to know which directories matter ahead of time, specify them every session, and their `CLAUDE.md` contents occupy the context window from the start whether they end up being relevant or not. This plugin takes a [progressive disclosure](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) approach instead: `CLAUDE.md` files are discovered and loaded on demand as the model accesses files in those directories, keeping the context window lean until the instructions are actually needed.
 

@@ -1,0 +1,17 @@
+{
+  "description": "Injects detailed Codex context on session start when the Codex plugin is detected as installed.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/scripts/inject-codex-context.sh\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}

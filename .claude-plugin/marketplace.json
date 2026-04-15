@@ -13,6 +13,13 @@
       "description": "Auto-discovers and loads CLAUDE.md files from any directory outside your project tree when the model accesses files there.",
       "version": "0.2.0",
       "keywords": ["claude-md", "discovery", "hooks", "auto-discovery"]
+    },
+    {
+      "name": "codex-context-loader",
+      "source": "./plugins/codex-context-loader",
+      "description": "Dynamically injects detailed Codex plugin context into sessions only when the Codex plugin is installed.",
+      "version": "1.0.0",
+      "keywords": ["codex", "context", "dynamic-loading", "hooks"]
     }
   ]
 }

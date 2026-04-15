@@ -1,0 +1,8 @@
+{
+  "name": "codex-context-loader",
+  "description": "Dynamically injects detailed Codex plugin context into sessions only when the Codex plugin is installed.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Spencer Presley"
+  }
+}

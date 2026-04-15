@@ -2,6 +2,8 @@
 
 Dynamically injects detailed Codex plugin context into Claude Code sessions — but only when the Codex plugin is actually installed.
 
+![Claude Code Session Start Hook with Plugin Installed](assets/codex-context-loader.png)
+
 ## Why this exists
 
 The Codex plugin (`codex@openai-codex`) ships with several skills and an agent, but most of them are internal plumbing with terse, unhelpful descriptions. When installed, they consume context tokens in every session regardless of whether you're using Codex. That's pure bloat when you don't need it.

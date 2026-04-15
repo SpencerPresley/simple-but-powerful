@@ -1,6 +1,6 @@
 # codex-context-loader
 
-Dynamically injects detailed Codex plugin context into Claude Code sessions — but only when the Codex plugin is actually installed.
+Dynamically injects detailed Codex plugin context into Claude Code sessions — but only when the Codex plugin is actually enabled.
 
 ![Claude Code Session Start Hook with Plugin Installed](assets/codex-context-loader.png)
 
@@ -10,7 +10,7 @@ The Codex plugin (`codex@openai-codex`) ships with several skills and an agent, 
 
 This plugin solves two problems:
 
-1. **Context bloat**: You might not always want the Codex plugin active, but when you do, you want Claude to actually understand what's available. This hook only fires when the Codex plugin is detected in `installed_plugins.json`, so you pay zero tokens when it's not installed.
+1. **Context bloat**: You might not always want the Codex plugin active, but when you do, you want Claude to actually understand what's available. This hook only fires when the Codex plugin is enabled in `settings.json`, so you pay zero tokens when it's disabled.
 
 2. **Lacking descriptions**: The agent-facing Codex skill descriptions are minimal — things like "Internal helper contract for calling the codex-companion runtime from Claude Code" don't tell the model enough to use the tools effectively. The injected context provides a fleshed-out briefing covering when to use the rescue agent, what flags are available, and how the internal pieces fit together.
 
@@ -18,9 +18,9 @@ This plugin solves two problems:
 
 A `SessionStart` hook runs a bash script that:
 
-1. Checks `~/.claude/plugins/installed_plugins.json` for the `codex@openai-codex` key
-2. If found, reads `hooks/context/codex-briefing.md` and outputs it as a `systemMessage`
-3. If not found, exits silently with no output and no token cost
+1. Checks `~/.claude/settings.json` for `enabledPlugins["codex@openai-codex"] == true`
+2. If enabled, reads `hooks/context/codex-briefing.md` and outputs it as a `systemMessage`
+3. If disabled or absent, exits silently with no output and no token cost
 
 The briefing content lives in a separate markdown file (`hooks/context/codex-briefing.md`) so it's easy to edit without touching the script.
 

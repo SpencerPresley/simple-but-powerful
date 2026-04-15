@@ -1,15 +1,15 @@
 #!/bin/bash
 set -euo pipefail
 
-INSTALLED_PLUGINS="$HOME/.claude/plugins/installed_plugins.json"
+SETTINGS="$HOME/.claude/settings.json"
 
-# Exit silently if no installed plugins file
-if [ ! -f "$INSTALLED_PLUGINS" ]; then
+# Exit silently if no settings file
+if [ ! -f "$SETTINGS" ]; then
   exit 0
 fi
 
-# Exit silently if Codex plugin is not installed
-if ! grep -q '"codex@openai-codex"' "$INSTALLED_PLUGINS"; then
+# Exit silently if Codex plugin is not enabled
+if ! jq -e '.enabledPlugins["codex@openai-codex"] == true' "$SETTINGS" > /dev/null 2>&1; then
   exit 0
 fi
 
